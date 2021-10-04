@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_extensions",
     "backend_test.utils",
+    # order_system
+    "order_system.menu"
 ]
 
 MIDDLEWARE = [
@@ -235,3 +237,10 @@ LOGGING = {
         },
     },
 }
+
+# Admin
+ADMIN_URL = 'admin/'
+ADMINS = [
+    ("""Luis Capote""", 'luiscapote30@gmail.com'),
+]
+MANAGERS = ADMINS
