@@ -1,6 +1,7 @@
-# Cornershop's Backend Test 
+nbvfhg# Cornershop's Backend Test 
 
-This technical test requires the design and implementation (using Django and Celery) of a management system to coordinate the meal delivery for Cornershop employees.
+0This technical test requires the design and implementation (using Django 
+and Celery) of a management system to coordinate the meal delivery for Cornershop employees.
 
 We provide a nice boilerplate project with Django and Celery up and running so you can use your time more wisely.
 

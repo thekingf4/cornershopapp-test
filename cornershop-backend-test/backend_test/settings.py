@@ -47,8 +47,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_extensions",
     "backend_test.utils",
-    # order_system
-    "order_system.menu"
+    # order_system apps
+    "order_system.menu",
+    "order_system.users"
 ]
 
 MIDDLEWARE = [
@@ -64,6 +65,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "backend_test.urls"
+
+# Users & Authentication
+AUTH_USER_MODEL = 'users.User'
 
 TEMPLATES = [
     {
@@ -148,11 +152,21 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, "../collected_static")
 STATIC_URL = "/static/"
 
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+# Media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
     ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 if getenv("BROWSABLE_API_RENDERER", default=False, coalesce=bool):

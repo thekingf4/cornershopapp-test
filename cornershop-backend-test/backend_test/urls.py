@@ -14,7 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.urls import path
+from django.urls import path, include
+from rest_framework.documentation import include_docs_urls
 
 from .utils.healthz import healthz
 from django.contrib import admin
@@ -22,4 +23,8 @@ from django.contrib import admin
 urlpatterns = [
     path("healthz", healthz, name="healthz"),
     path(settings.ADMIN_URL, admin.site.urls),
+    path('docs/', include_docs_urls(title='My API title')),
+    path('v1/', include(('order_system.menu.urls', 'menu'), namespace='menu')),
+    path('v1/', include(('order_system.users.urls', 'users'),
+                        namespace='users'))
 ]

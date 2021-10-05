@@ -1,6 +1,6 @@
 # django Imports
 from django.db.models import CharField, BooleanField, UUIDField, ForeignKey, \
-    CASCADE, Model
+    CASCADE, Model, ImageField
 # Utils imports
 from uuid import uuid4
 from order_system.utils.models import MetaDataInfo
@@ -18,7 +18,7 @@ class Menu(MetaDataInfo, Model):
     is_active: Store the is_active when the object was created
     """
     id = UUIDField(primary_key=True, default=uuid4, editable=False)
-    name = CharField(max_length=150)
+    name = CharField(max_length=150, unique=True)
     description = CharField(max_length=255, blank=True, null=True)
     is_active = BooleanField(default=True)
 

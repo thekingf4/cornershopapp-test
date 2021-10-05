@@ -11,4 +11,4 @@ from rest_framework.response import Response
 @permission_classes([permissions.AllowAny])
 @authentication_classes([])
 def healthz(request, *args, **kwargs):
-    return Response(status=200)
+    return Response('All ok', status=200)
