@@ -3,10 +3,9 @@ from django.db.models import CharField, BooleanField, UUIDField, ForeignKey, \
     CASCADE, Model, ImageField
 # Utils imports
 from uuid import uuid4
-from order_system.utils.models import MetaDataInfo
 
 
-class Menu(MetaDataInfo, Model):
+class Menu(Model):
     """Menus model
 
     Menu created to store the name of each dish that is offered, additionally
@@ -26,7 +25,7 @@ class Menu(MetaDataInfo, Model):
         return self.name
 
 
-class Ingredients(MetaDataInfo, Model):
+class Ingredients(Model):
     """Ingredient model
 
 

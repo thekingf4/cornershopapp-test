@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import datetime
 
 from .envtools import getenv
 
@@ -20,6 +21,8 @@ from .envtools import getenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+APPS_DIR = os.path.join(BASE_DIR, "/order_system")
 
 SECRET_KEY = getenv("SECRET_KEY", default="###SECRET_KEY###")
 
@@ -32,6 +35,15 @@ SESSION_COOKIE_HTTPONLY = True
 
 SERVER_URL = os.getenv("SERVER_URL", default="*")
 
+# EMAIL
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+EMAIL_BACKEND = getenv(
+    "DJANGO_EMAIL_BACKEND",
+    default="django.core.mail.backends.smtp.EmailBackend",
+)
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
+EMAIL_TIMEOUT = 5
 
 APPEND_SLASH = False
 
@@ -44,7 +56,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_yasg",
     "rest_framework",
+    "rest_framework_jwt",
     "django_extensions",
     "backend_test.utils",
     # order_system apps
@@ -72,13 +86,20 @@ AUTH_USER_MODEL = 'users.User'
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True,
+        "DIRS": [os.path.join(APPS_DIR, "/templates")],
         "OPTIONS": {
+            "loaders": [
+                "django.template.loaders.filesystem.Loader",
+                "django.template.loaders.app_directories.Loader",
+            ],
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
             ],
         },
@@ -166,7 +187,6 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
     ],
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 if getenv("BROWSABLE_API_RENDERER", default=False, coalesce=bool):
@@ -258,3 +278,37 @@ ADMINS = [
     ("""Luis Capote""", 'luiscapote30@gmail.com'),
 ]
 MANAGERS = ADMINS
+
+JWT_AUTH = {
+    'JWT_SECRET_KEY': SECRET_KEY,
+    'JWT_GET_USER_SECRET_KEY': None,
+    'JWT_PRIVATE_KEY': None,
+    'JWT_PUBLIC_KEY': None,
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_INSIST_ON_KID': False,
+    'JWT_TOKEN_ID': 'include',
+    'JWT_AUDIENCE': None,
+    'JWT_ISSUER': None,
+    'JWT_ENCODE_HANDLER': 'rest_framework_jwt.utils.jwt_encode_payload',
+    'JWT_DECODE_HANDLER': 'rest_framework_jwt.utils.jwt_decode_token',
+    'JWT_PAYLOAD_HANDLER': 'rest_framework_jwt.utils.jwt_create_payload',
+    'JWT_PAYLOAD_GET_USERNAME_HANDLER': 'rest_framework_jwt.utils.jwt_get_username_from_payload_handler',
+    'JWT_PAYLOAD_INCLUDE_USER_ID': True,
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_LEEWAY': 0,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=90),
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'rest_framework_jwt.utils.jwt_create_response_payload',
+    'JWT_AUTH_COOKIE': None,
+    'JWT_AUTH_COOKIE_DOMAIN': None,
+    'JWT_AUTH_COOKIE_PATH': '/',
+    'JWT_AUTH_COOKIE_SECURE': True,
+    'JWT_AUTH_COOKIE_SAMESITE': 'Lax',
+    'JWT_IMPERSONATION_COOKIE': None,
+    'JWT_DELETE_STALE_BLACKLISTED_TOKENS': False,
+}
+
+URL_EMAILS = getenv('URL_EMAILS', default=None)
