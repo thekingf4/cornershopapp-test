@@ -28,9 +28,8 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Order System API",
         default_version='v1',
-        description="This is API of the core Beuxapp System. Here your can find services MPV de Beuxapp. Your can have more information on website [https://beuxapp.com]",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="sergio@gmail.com"),
+        description="This is the main system API of Nora's command system. Here you can find the rest services.",
+        contact=openapi.Contact(email="luiscapote30@gmail.com"),
         license=openapi.License(name="BSD License"),
     ),
     public=True,
