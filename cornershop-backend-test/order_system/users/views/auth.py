@@ -14,12 +14,23 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 class AuthAPIView(GenericViewSet):
-    """Auth view"""
+    """Auth view
+
+    view class used to generate the login, register and
+    change_password, and extend from the GenericViewSet class
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
     def get_permissions(self):
-        """Permission validate user"""
+        """Permission validate user
+
+
+        Class method used to validate the permissions that the user
+        has on the different methods
+
+        Returns a list of permissions
+        """
 
         permissions = [AllowAny, ]
         if self.action in ["change_password", "logout", ]:
@@ -44,7 +55,7 @@ class AuthAPIView(GenericViewSet):
     @swagger_auto_schema(
         tags=['Auth'],
         query_serializer=JSONWebTokenSerializer,
-        responses={HTTP_200_OK: ResponseLoginSerializer, 404: openapi.Schema(
+        responses={HTTP_200_OK: ResponseLoginSerializer, 400: openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
                 "token": openapi.Schema(type=openapi.TYPE_STRING, description='string')
@@ -53,8 +64,16 @@ class AuthAPIView(GenericViewSet):
     )
     @action(detail=False, methods=['POST'])
     def login(self, request):
-        """ESte es un docstring"""
-        serializer = self.get_serializer(data=request.data)
+        """Metodo login
+
+        utilizado para realizar la autentication a la aplicación
+
+        devuelve un JSON con los siguientes atributos:
+
+        token: JSON Web Token that can be used to authenticate later calls
+        user: Información del usuario
+        """
+        serializer = JSONWebTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = {
             "token": serializer.validated_data["token"],
