@@ -22,8 +22,6 @@ from .envtools import getenv
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-APPS_DIR = os.path.join(BASE_DIR, "/order_system")
-
 SECRET_KEY = getenv("SECRET_KEY", default="###SECRET_KEY###")
 
 DEBUG = getenv("DEBUG", default=False, coalesce=bool)
@@ -62,7 +60,6 @@ INSTALLED_APPS = [
     "django_extensions",
     "backend_test.utils",
     # order_system apps
-    "order_system.menu",
     "order_system.users"
 ]
 
@@ -86,20 +83,13 @@ AUTH_USER_MODEL = 'users.User'
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(APPS_DIR, "/templates")],
+        "DIRS": [],
+        "APP_DIRS": True,
         "OPTIONS": {
-            "loaders": [
-                "django.template.loaders.filesystem.Loader",
-                "django.template.loaders.app_directories.Loader",
-            ],
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
-                "django.template.context_processors.i18n",
-                "django.template.context_processors.media",
-                "django.template.context_processors.static",
-                "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
             ],
         },
